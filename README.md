@@ -20,3 +20,6 @@ Alert me when a specific contact sensor on my alarm is opened.
 
 ## AlarmThing AlertAll
 Send a message whenever any sensor changes on the alarm.
+
+## You Left the Door Open
+Send a message when a specified door has been left open for too long.
