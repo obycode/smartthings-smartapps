@@ -12,6 +12,10 @@ switch will tell you if the garage door is open or closed.
 ## AlarmThing Alert
 Alert me when my alarm status changes (armed, alarming, disarmed).
 
+## AlarmThing Sensor Alert
+Alert me when there is activity on one or more of my alarm's sensors.
+NOTE: This app provides a major improvement over those below as the sensors are dynamically listed as options instead of requiring you to type the exact name of the sensor as a string.
+
 ## AlarmThing AlertMotion
 Alert me when a specific motion sensor on my alarm is activated.
 
