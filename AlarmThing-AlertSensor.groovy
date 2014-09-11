@@ -14,7 +14,7 @@
  *
  */
 definition(
-    name: "Alarm Alert Sensor",
+    name: "AlarmThing Sensor Alert",
     namespace: "com.obycode",
     author: "ObyCode",
     description: "Alert me when there is activity on one or more of my alarm's sensors.",
