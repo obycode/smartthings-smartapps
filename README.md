@@ -27,3 +27,9 @@ Send a message whenever any sensor changes on the alarm.
 
 ## You Left the Door Open
 Send a message when a specified door has been left open for too long.
+
+## StriimLight Connect
+Service manager to find and setup your StriimLight Color bulbs.
+
+## StriimLight
+Device type for the StriimLight Wifi Color bulbs. This device controls the light bulb (on/off, dimmer level, color). You should also connect to the bulb as a DLNA MediaRenderer to control the music. This has been tested with the StriimLight Wifi Color.
