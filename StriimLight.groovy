@@ -23,7 +23,7 @@ metadata {
     attribute "model", "string"
     attribute "temperature", "number"
     attribute "brightness", "number"
-    attribute "mode", "string"
+    attribute "lightMode", "string"
 
     command "subscribe"
     command "unsubscribe"
@@ -121,16 +121,20 @@ def parse(description) {
         node = msg.xml.property.CurrentMode
         if (node.size()) {
           def modeString = node == 1 ? "white" : "color"
-          return sendEvent(name: "mode", value: modeString, description: "$device.displayName Mode is $modeString")
+          return sendEvent(name: "lightMode", value: modeString, description: "$device.displayName Mode is $modeString")
         }
 
         // Color
-        def bodyXml = parseXml(msg.xml.text())
-        node = bodyXml.RGB
-        if (node.size()) {
-          def fields = node.text().split(',')
-          def colorHex = '#' + String.format('%02x%02x%02x', fields[0].toInteger(), fields[1].toInteger(), fields[2].toInteger())
-          return sendEvent(name: "color", value: colorHex, description:"$device.displayName Color is $colorHex")
+        try {
+          def bodyXml = parseXml(msg.xml.text())
+          node = bodyXml.RGB
+          if (node.size()) {
+            def fields = node.text().split(',')
+            def colorHex = '#' + String.format('%02x%02x%02x', fields[0].toInteger(), fields[1].toInteger(), fields[2].toInteger())
+            return sendEvent(name: "color", value: colorHex, description:"$device.displayName Color is $colorHex")
+          }
+        } catch (org.xml.sax.SAXParseException e) {
+          // log.debug "${msg.body}"
         }
 
         // Not sure what this is for?
