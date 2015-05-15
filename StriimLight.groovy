@@ -247,7 +247,8 @@ def setTemperature(val) {
 }
 
 def White() {
-    awoxAction("SetTemperature", "X_WhiteLight", getDataValue("xwlcurl"), [Temperature: 4016])
+  def lastTemp = device.currentValue("temperature") + 4016
+  awoxAction("SetTemperature", "X_WhiteLight", getDataValue("xwlcurl"), [Temperature: lastTemp])
 }
 
 def setColor(value) {
