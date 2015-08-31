@@ -65,6 +65,9 @@ def arrived(id) {
 	log.debug "$id has arrived"
 	def theList = device.latestValue("inRange")
 	def inRangeList = new JsonSlurper().parseText(theList)
+	if (inRangeList.contains(id)) {
+		return
+	}
 	inRangeList += id
 	def json = new groovy.json.JsonBuilder(inRangeList)
 	log.debug "Now in range: ${json.toString()}"

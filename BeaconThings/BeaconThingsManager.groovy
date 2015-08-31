@@ -76,8 +76,12 @@ void addBeacon() {
     }
     log.debug "adding beacon $beaconId"
     def d = addChildDevice("com.obycode", "BeaconThing", beaconId,  null, [label:beacon.name, name:"BeaconThing", completedSetup: true])
+    log.debug "addChildDevice returned $d"
 
-    if (beacon.presence) {
+    if (beacon.present) {
+      d.arrive(beacon.present)
+    }
+    else if (beacon.presence) {
       d.setPresence(beacon.presence)
     }
   }
@@ -85,8 +89,11 @@ void addBeacon() {
 
 void updateBeacon() {
   log.debug "updating beacon ${params.id}"
-  def children = getChildDevices()
-  def beaconDevice = children.find{ d -> d.deviceNetworkId == "${params.id}" }
+  def beaconDevice = getChildDevice(params.id)
+  if (!beaconDevice) {
+    log.debug "Beacon not found"
+    return
+  }
 
   // This could be just updating the presence
   def presence = request.JSON?.presence
@@ -104,8 +111,8 @@ void updateBeacon() {
 
   // It could be someone left
   def left = request.JSON?.left
-  if (arrived) {
-    log.debug "$arrived left ${beaconDevice.label}"
+  if (left) {
+    log.debug "$left left ${beaconDevice.label}"
     beaconDevice.left(left)
   }
 
@@ -118,9 +125,7 @@ void updateBeacon() {
 
 void deleteBeacon() {
   log.debug "deleting beacon ${params.id}"
-  def children = getChildDevices()
-  def beaconDevice = children.find{ d -> d.deviceNetworkId == "${params.id}" }
-  deleteChildDevice(beaconDevice.deviceNetworkId)
+  deleteChildDevice(params.id)
 }
 
 private removeChildDevices(delete) {
