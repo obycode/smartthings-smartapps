@@ -13,12 +13,20 @@
 *  for the specific language governing permissions and limitations under the License.
 *
 */
+
+import groovy.json.JsonSlurper
+
 metadata {
 	definition (name: "BeaconThing", namespace: "com.obycode", author: "obycode") {
 		capability "Beacon"
+		capability "Presence Sensor"
 		capability "Sensor"
 
-		command "setPresence"
+		attribute "inRange", "json_object"
+
+		command "setPresence", ["string"]
+		command "arrived", ["string"]
+		command "left", ["string"]
 	}
 
 	simulator {
@@ -39,13 +47,44 @@ metadata {
 // parse events into attributes
 def parse(String description) {
 	log.debug "Parsing '${description}'"
-	// initialize to closed state
-	if (description == "updated") {
-		sendEvent(name: "presence", value: "not present")
-	}
+}
+
+def installed() {
+	sendEvent(name: "presence", value: "not present")
+	def emptyList = []
+	def json = new groovy.json.JsonBuilder(emptyList)
+	sendEvent(name:"inRange", value:json.toString())
 }
 
 def setPresence(status) {
-	log.debug "called setPresence!"
+	log.debug "Status is $status"
 	sendEvent(name:"presence", value:status)
+}
+
+def arrived(id) {
+	log.debug "$id has arrived"
+	def theList = device.latestValue("inRange")
+	def inRangeList = new JsonSlurper().parseText(theList)
+	inRangeList += id
+	def json = new groovy.json.JsonBuilder(inRangeList)
+	log.debug "Now in range: ${json.toString()}"
+	sendEvent(name:"inRange", value:json.toString())
+
+	if (inRangeList.size() == 1) {
+		setPresence("present")
+	}
+}
+
+def left(id) {
+	log.debug "$id has left"
+	def theList = device.latestValue("inRange")
+	def inRangeList = new JsonSlurper().parseText(theList)
+	inRangeList -= id
+	def json = new groovy.json.JsonBuilder(inRangeList)
+	log.debug "Now in range: ${json.toString()}"
+	sendEvent(name:"inRange", value:json.toString())
+
+	if (inRangeList.empty) {
+		setPresence("not present")
+	}
 }

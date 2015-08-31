@@ -25,6 +25,7 @@ metadata {
     attribute "brightness", "number"
     attribute "lightMode", "string"
 
+    command "setColorHex" "string"
     command "cycleColors"
     command "setTemperature"
     command "White"

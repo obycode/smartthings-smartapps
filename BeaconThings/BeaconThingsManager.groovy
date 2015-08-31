@@ -95,6 +95,20 @@ void updateBeacon() {
     beaconDevice.setPresence(presence)
   }
 
+  // It could be someone arriving
+  def arrived = request.JSON?.arrived
+  if (arrived) {
+    log.debug "$arrived arrived at ${beaconDevice.label}"
+    beaconDevice.arrived(arrived)
+  }
+
+  // It could be someone left
+  def left = request.JSON?.left
+  if (arrived) {
+    log.debug "$arrived left ${beaconDevice.label}"
+    beaconDevice.left(left)
+  }
+
   // or it could be updating the name
   def beacon = request.JSON?.beacon
   if (beacon) {
