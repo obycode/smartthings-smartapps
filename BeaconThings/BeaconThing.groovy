@@ -23,6 +23,7 @@ metadata {
 		capability "Sensor"
 
 		attribute "inRange", "json_object"
+		attribute "inRangeFriendly", "string"
 
 		command "setPresence", ["string"]
 		command "arrived", ["string"]
@@ -39,8 +40,11 @@ metadata {
 			state("present", labelIcon:"st.presence.tile.present", backgroundColor:"#53a7c0")
 			state("not present", labelIcon:"st.presence.tile.not-present", backgroundColor:"#ffffff")
 		}
+		valueTile("inRange", "device.inRangeFriendly", inactiveLabel: true, height:1, width:3, decoration: "flat") {
+			state "default", label:'${currentValue}', backgroundColor:"#ffffff"
+		}
 		main "presence"
-		details "presence"
+		details (["presence","inRange"])
 	}
 }
 
@@ -73,6 +77,10 @@ def arrived(id) {
 	log.debug "Now in range: ${json.toString()}"
 	sendEvent(name:"inRange", value:json.toString())
 
+	// Generate human friendly string for tile
+	def friendlyList = "Nearby: " + inRangeList.join(", ")
+	sendEvent(name:"inRangeFriendly", value:friendlyList)
+
 	if (inRangeList.size() == 1) {
 		setPresence("present")
 	}
@@ -87,7 +95,13 @@ def left(id) {
 	log.debug "Now in range: ${json.toString()}"
 	sendEvent(name:"inRange", value:json.toString())
 
+	// Generate human friendly string for tile
+	def friendlyList = "Nearby: " + inRangeList.join(", ")
+
 	if (inRangeList.empty) {
 		setPresence("not present")
+		friendlyList = "No one is nearby"
 	}
+
+	sendEvent(name:"inRangeFriendly", value:friendlyList)
 }
