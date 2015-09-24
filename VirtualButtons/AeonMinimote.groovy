@@ -23,7 +23,7 @@ metadata {
 	}
 	tiles {
 		standardTile("button", "device.button", width: 2, height: 2) {
-			state "default", label: "", action:"device.setButtons", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff"
+			state "default", label: "", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff"
 		}
 		// Configure button.  Syncronize the device capabilities that the UI provides
     standardTile("configure", "device.configure", inactiveLabel: false, decoration: "flat") {
