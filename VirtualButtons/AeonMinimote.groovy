@@ -96,7 +96,7 @@ def configurationCmds() {
 
 def configure() {
 	// Set the number of buttons to 4
-	createEvent(name: "numButtons", value: "4", displayed: false)
+	sendEvent(name: "numButtons", value: "4", displayed: false)
 
 	def cmds = configurationCmds()
 	log.debug("Sending configuration: $cmds")
