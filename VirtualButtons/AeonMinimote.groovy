@@ -23,10 +23,14 @@ metadata {
 	}
 	tiles {
 		standardTile("button", "device.button", width: 2, height: 2) {
-			state "default", label: "", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff"
+			state "default", label: "", action:"device.setButtons", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff"
 		}
+		// Configure button.  Syncronize the device capabilities that the UI provides
+    standardTile("configure", "device.configure", inactiveLabel: false, decoration: "flat") {
+      state "configure", label:'', action:"configuration.configure", icon:"st.secondary.configure"
+    }
 		main "button"
-		details(["button"])
+		details(["button", "configure"])
 	}
 }
 
@@ -92,7 +96,7 @@ def configurationCmds() {
 
 def configure() {
 	// Set the number of buttons to 4
-	updateState("numButtons", "4")
+	createEvent(name: "numButtons", value: "4", displayed: false)
 
 	def cmds = configurationCmds()
 	log.debug("Sending configuration: $cmds")
