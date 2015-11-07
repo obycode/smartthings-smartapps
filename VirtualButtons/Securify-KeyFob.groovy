@@ -113,7 +113,7 @@ def configure(){
 	log.debug "Config Called"
 
 	// Set the number of buttons to 3
-	updateState("numButtons", "3")
+	sendEvent(name: "numButtons", value: "3", displayed: false)
 
 	def configCmds = [
 	"zcl global write 0x500 0x10 0xf0 {${device.zigbeeId}}", "delay 200",
